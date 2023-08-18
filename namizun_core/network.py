@@ -1,6 +1,12 @@
 from psutil import net_io_counters
 from namizun_core import database
 
+def _net_io_counters():
+    iface = database.get_cache_parameter('network_interface')
+    if iface is not None:
+        return net_io_counters(pernic=True)[iface]
+    else:
+        return net_io_counters()
 
 def get_size(only_bytes):
     flag = ''
@@ -14,19 +20,19 @@ def get_size(only_bytes):
 
 
 def get_network_io():
-    io = net_io_counters()
+    io = _net_io_counters()
     return io.bytes_sent + database.get_parameter('upload_amount_synchronizer') \
         , io.bytes_recv + database.get_parameter('download_amount_synchronizer')
 
 
 def get_system_network_io():
-    io = net_io_counters()
+    io = _net_io_counters()
     return io.bytes_sent, io.bytes_recv
 
 
 def get_system_upload():
-    return net_io_counters().bytes_sent
+    return _net_io_counters().bytes_sent
 
 
 def get_system_download():
-    return net_io_counters().bytes_recv
+    return _net_io_counters().bytes_recv

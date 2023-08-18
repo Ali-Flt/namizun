@@ -6,7 +6,7 @@ parameters = [
     'fake_udp_uploader_running',
     'coefficient_buffer_size', 'coefficient_uploader_threads_count', 'coefficient_buffer_sending_speed',
     'range_ips', 'in_submenu', 'coefficient_limitation',
-    'total_upload_cache', 'total_download_cache', 'download_amount_synchronizer', 'upload_amount_synchronizer']
+    'total_upload_cache', 'total_download_cache', 'download_amount_synchronizer', 'upload_amount_synchronizer', 'network_interface']
 namizun_db = None
 prefix = 'namizun_'
 ip_prefix = f'{prefix}ip_'
@@ -48,6 +48,8 @@ def get_default(key):
         return 0
     elif key == 'in_submenu':
         return False
+    elif key == 'network_interface':
+        return None
 
 
 def check_datatype(value):
