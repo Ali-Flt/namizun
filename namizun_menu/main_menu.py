@@ -1,8 +1,9 @@
+import numpy as np
+from crontab import CronTab
+from os import system, path
 from namizun_core import database
 from namizun_menu import udp_submenu, display, network_submenu
 from namizun_core.network import get_size
-from namizun_core.cron import cron_setter, cron_remover
-from os import system, path
 
 
 def reload_namizun_service():
@@ -12,6 +13,35 @@ def reload_namizun_service():
         system('cp /var/www/namizun/else/range_ips /var/www/namizun/range_ips')
         database.set_parameter('range_ips', open('/var/www/namizun/range_ips').read())
     system('systemctl restart namizun.service')
+
+def cron_setter():
+    display.banner()
+    print(f"\n{display.cornsilk_color}Enter the number of minutes you want namizun to run per hour (muss be <= 30).\n")
+    selection = int(input("\nNumber of minutes per hour?"))
+    
+    if 0 < selection <= 30:
+        cron = CronTab(user=True)
+        start_mins = np.linspace(0, 58, selection, dtype=int)
+        stop_mins = start_mins + 1
+        for start, end in zip(start_mins, stop_mins):
+            job = cron.new(command='systemctl start namizun.service')
+            job.setall(f'{start} * * * *')
+            job = cron.new(command='systemctl stop namizun.service')
+            job.setall(f'{end} * * * *')
+        cron.write()
+        return menu()
+    elif selection == 0:
+        return menu()
+    else:
+        return cron_setter()
+
+
+def cron_remover():
+    cron = CronTab(user=True)
+    iter = cron.find_command('namizun')
+    for job in iter:
+        cron.remove(job)
+    cron.write()
 
 
 def menu():
