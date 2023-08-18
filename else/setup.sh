@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo 'Install prerequisites (step 1)'
-apt update && apt install python3-pip python3-venv redis git -y
+apt update && apt install python3-pip python3-venv redis git cron -y
 if [ $? == 0 ]; then
   echo 'Successfully installed'
 else
