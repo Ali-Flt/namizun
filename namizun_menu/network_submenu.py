@@ -53,8 +53,10 @@ def network_interface_setter():
     elif selection == -1:
         database.set_parameter('network_interface', None)
         return menu()
-    else:
+    elif selection == 0:
         return menu()
+    else:
+        return network_interface_setter()
 
 
 def download_amount_synchronizer_setter():
