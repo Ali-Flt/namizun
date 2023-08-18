@@ -40,17 +40,21 @@ def network_interface_setter():
     display.banner()
     print(f"\n{display.cornsilk_color}Enter the network interface ID. Put -1 for using all interfaces.\n")
     addrs = list(psutil.net_if_addrs())
+    if 'lo' in addrs:
+        idx = addrs.index('lo')
+        del addrs[idx]
     for i, key in enumerate(addrs):
-        print(f'{i}: {key}')
+        print(f'{i+1}: {key}')
     selection = int(input("\nInteface ID?"))
     
-    if 0 <= selection < len(addrs):
-        database.set_parameter('network_interface', addrs[selection])
+    if 0 < selection <= len(addrs):
+        database.set_parameter('network_interface', addrs[selection-1])
         return menu()
     elif selection == -1:
         database.set_parameter('network_interface', None)
+        return menu()
     else:
-        return network_interface_setter()
+        return menu()
 
 
 def download_amount_synchronizer_setter():
@@ -99,7 +103,7 @@ def menu():
         f"{display.cornsilk_color}[3] - Download amount synchronizer : "
         f"{display.cyan_color + str(get_size(database.get_parameter('download_amount_synchronizer')))}\n\n"
         f"{display.cornsilk_color}[4] - Select network interface : "
-        f"{display.cyan_color + str(get_size(database.get_parameter('network_interface')))}\n\n"
+        f"{display.cyan_color + str(database.get_parameter('network_interface'))}\n\n"
         f"{display.cornsilk_color}[9] - RESET NETWORK USAGE\n"
         f"[0] - Back to main menu\n\n"
         f"ENTER YOUR SELECTION: \n\n")

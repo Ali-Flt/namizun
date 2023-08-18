@@ -2,7 +2,7 @@ from psutil import net_io_counters
 from namizun_core import database
 
 def _net_io_counters():
-    iface = database.get_cache_parameter('network_interface')
+    iface = database.get_parameter('network_interface')
     if iface is not None:
         return net_io_counters(pernic=True)[iface]
     else:
