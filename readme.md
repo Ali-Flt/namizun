@@ -16,3 +16,8 @@ rm /etc/systemd/system/namizun.service
 rm /usr/local/bin/namizun
 sudo systemctl daemon-reload
 ```
+
+## New Features:
+
+1. Added the ability to select the network interface.
+2. Added the ability to set cron rules for namizun for it to run a specific number of minutes per hour throughtout the day.
